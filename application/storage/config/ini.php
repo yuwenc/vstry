@@ -62,8 +62,6 @@ $config['cache_option'] = array(
  * 路由白名单设置
  */
 $config['route_maps'] = array(
-	'(:let)-(:let)-(:any)'  => '/Controller/${1}::${2}/${3}',
-	'(:let)-(:any)'         => '/Controller/${1}::${2}',
 	'(:let)/(:let)/(:any)'  => '/Controller/${1}::${2}/${3}',
 	'(:let)/(:any)'         => '/Controller/${1}::${2}',
 	'(:any)'                => '/Controller/Main::index',   //默认的控制器
