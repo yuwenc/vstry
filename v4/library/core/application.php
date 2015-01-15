@@ -13,6 +13,7 @@ class Application
      * @var string
      */
     protected static $module = 'application';
+    protected static $module_alias = 'application';
     
     /**
      * 配置文件
@@ -23,17 +24,17 @@ class Application
     /**
      * 设置模块
      */
-    public static function module($str = null)
+    public static function module($name = null)
     {
-        if (is_null($str))
+        if (is_null($name))
         {
             return self::$module;
         }
         else
         {
-            self::$module = $str;
+            self::$module = $name;
             // 定义项目目录常量
-			define ( 'W_APPLICATION_PATH', realpath ( __DIR__ .'/../../'.$str));
+			define ( 'W_APPLICATION_PATH', realpath ( __DIR__ .'/../../'.$name));
 			//初始化加载
 			require realpath ( __DIR__ .'/../bootstrap.php');
         }
