@@ -3,12 +3,13 @@ namespace Core;
 
 class URI 
 {
+	
 	/**
 	 * 获取请求的路径
 	 */
 	public static function get_url_path()
 	{
-		return  trim ( $_SERVER ['REQUEST_URI'], '/' );
+		return trim ( $_SERVER ['REQUEST_URI'], '/' );
 	}
 	
 	/**
@@ -38,8 +39,7 @@ class URI
 	{
 		$arr = array();
 		$path = self::get_url_path();
-		$path_arr = explode('/', $path);
-		$slice = array_slice($path_arr, $n, -1);
+		$slice = array_slice(explode('/', $path), $n, -1);
 	 	while (count($slice) > 0)
         {
             $arr[array_shift($slice)] = array_shift($slice);
