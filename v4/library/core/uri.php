@@ -1,6 +1,10 @@
 <?php
 namespace Core;
-
+/**
+ * uri处理类
+ * @author Yuwenc
+ *
+ */
 class URI 
 {
 	
