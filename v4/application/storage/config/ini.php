@@ -20,6 +20,11 @@ $config['upload_dir'] = realpath(W_APPLICATION_PATH . '/../public/upload');
 $config['upload_url'] = W_DOMAIN.'/upload';
 
 /**
+ * 根目录
+ */
+$config['base_url'] = W_DOMAIN;
+
+/**
  * 开启错误
  */
 $config['open_error_log'] = true;
