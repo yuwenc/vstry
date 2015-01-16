@@ -33,9 +33,9 @@ $config['open_error_log'] = true;
  * 数据库连接
  */
 $config['database']['master'] = array (
-	'db_target' => 'mysql:host=203.195.149.15;port=3306;dbname=baken', 
-	'user_name' => 'baken', 
-	'password'  => 'baken', 
+	'db_target' => 'mysql:host=127.0.0.1;port=3306;dbname=wxenterprise', 
+	'user_name' => 'wxenterprise', 
+	'password'  => 'wxenterprise', 
 	'params'    => array ( PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8" ) 
 );
 

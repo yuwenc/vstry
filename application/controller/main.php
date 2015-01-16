@@ -10,7 +10,16 @@ class Main extends \Core\Controller
 	
 	public function show()
 	{
-		$url = \Core\URI::a2p(array('demo'=>'target', 'name'=>'yuwenc', 'path_id'=>14));
-		redirect($url);
+		$user = new \Model\User(1112);
+		$user->load();
+		//var_dump($user);
+		var_dump($user->account);exit();
+		/*
+		foreach ($user->account as $account)
+		{
+		$account->create_time = W_START_TIME;
+		$account->save();
+		}
+		*/
 	}
 }
