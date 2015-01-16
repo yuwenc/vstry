@@ -10,6 +10,7 @@ class Main extends \Core\Controller
 	
 	public function show()
 	{
-		echo 'show';
+		$url = \Core\URI::a2p(array('demo'=>'target', 'name'=>'yuwenc', 'path_id'=>14));
+		redirect($url);
 	}
 }
