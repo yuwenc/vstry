@@ -6,13 +6,11 @@ namespace Core;
  */
 class Application
 {
-	
-    
     /**
      * 调用的模块
      * @var string
      */
-    protected static $module = 'application';
+    protected static $module = '';
     
     /**
      * 配置文件
@@ -71,7 +69,6 @@ class Application
 	 */
 	public static function config($file_name = 'ini.php')
 	{
-	
 		if(empty(self::$configs[$file_name]))
 		{
 			$file = W_APPLICATION_PATH.'/storage/config/'.$file_name;
@@ -85,7 +82,6 @@ class Application
 		        throw new \Exception("you must set config file path");
 		    }
 		}
-	
 		return $configs[$file_name];
 	}
 
