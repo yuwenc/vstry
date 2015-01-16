@@ -91,69 +91,6 @@ function log_message($message, $dir = NULL)
 	return error_log ( date ( 'H:i:s ' ) . $client_ip . " $message\n", 3, $file);
 }
 
-
-/**
- * url生成函数
- * @param string $path
- * @param array $params
- * @return string
- */
-function site_url($path = NULL, array $params = NULL)
-{
-    if (strpos ( $path, '://' ) === FALSE)
-	{
-		$path = $path ? '/' . trim ( $path, '/' ) : '';
-	}
-    $params = $params ? '?' . http_build_query ($params, '', '&') : '';
-	return $path . $params;
-}
-
-/**
- * 当前url
- * @param array $params
- */
-
-function current_url(array $params = array(), $append_params = false)
-{
-    $module = \Core\Application::get_module();
-    $controller = \Core\Application::get_controller(true);
-    $action = \Core\Application::get_action();
-    if(isset($params['module']))
-    {
-        $module = $params['module'];
-        unset($params['module']);
-    }
-    if(isset($params['controller']))
-    {
-        $controller = $params['controller'];
-        unset($params['controller']);
-    }
-    if(isset($params['action']))
-    {
-        $action = $params['action'];
-        unset($params['action']);
-    }
-    if ($append_params)
-    {
-        $params = array_merge(\Core\Application::get_params(), $params);
-    }
-    $path = '';
-	if ($module)
-    {
-        $path = '/'.$module;
-    }
-	$path .= '/'.$controller.'/'.$action;
-	if(!empty($params))
-	{
-	    foreach ($params as $key => $val)
-	    {
-	        $path .= '/'.$key.'/'.$val;
-	    }
-	}
-    return $path;
-}
-
-
 /**
  * 页面跳转函数
  * @param string $url

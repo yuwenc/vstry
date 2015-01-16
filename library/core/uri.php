@@ -21,18 +21,18 @@ class URI
 	 * @param array $arr
 	 * @param string $domain
 	 */
-	public static function a2p($arr, $domain = '')
+	public static function a2p($arr)
 	{
 		$path = '/';
+	    if(empty(\Core\Application::get_module()))
+        {
+        	$path .= \Core\Application::get_module().'/';
+        }
 		foreach ($arr as $key => $val)
 		{
 			$path .= $key.'/'.$val.'/';
 		}
-        if(empty($domain))
-        {
-        	$domain = \Core\Application::config()->base_url;
-        }
-        return $domain . rtrim($path, '/');
+        return rtrim($path, '/');
 	}
 	
 	/**
