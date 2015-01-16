@@ -23,7 +23,7 @@ class Application
     /**
      * 设置模块
      */
-    public static function module($name = null, $path)
+    public static function bind_module($name, $path)
     {
         if (is_null($name))
         {
@@ -37,6 +37,14 @@ class Application
 			//初始化加载
 			require realpath ( __DIR__ .'/../bootstrap.php');
         }
+    }
+    
+    /**
+     * 获取模块
+     */
+    public static function get_module()
+    {
+        return self::$module;
     }
 	
     /**
