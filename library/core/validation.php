@@ -106,7 +106,6 @@ class Validation
      */
     public function required($param)
     {
-//        if(is_null($param) || '' === $param || false === $param)
         if(empty($param))
         {
             $this->has_error = true;
