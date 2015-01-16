@@ -13,7 +13,6 @@ class Application
      * @var string
      */
     protected static $module = 'application';
-    protected static $module_alias = 'application';
     
     /**
      * 配置文件
