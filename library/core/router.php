@@ -110,11 +110,12 @@ class Router
     	{
     		$parts[0] = str_replace('/', '\\', $parts[0]);
     		$class = new $parts[0];
-    		$class->run($parts[1]);
+    		$path = explode('/', $parts[1]);
+    		$class->run(array_shift($path));
     	}
     	else 
     	{
-    		echo '404';
+    		echo 'dispatch 404';
     	}
     }
 }
