@@ -38,7 +38,7 @@ namespace Core;
  *    public static $key = 'relation_id';
  *    
  *    public static $has_to = array(
- *        'user' => array('model'=>'\Company\User', 'key'=>'user_id'),
+ *        'user' => array('model'=>'\Company\User', 'relation_key'=>'user_id'),
  *        'department' => array('model'=>'\Company\Department', 'relation_key'=>'department_id'),
  *    );
  * }
@@ -127,7 +127,7 @@ Abstract class ORM
      * @return \Core\Database
      * @todo
      */
-    public static function connect()
+    public static function database()
     {}
     
     /**
@@ -142,8 +142,8 @@ Abstract class ORM
     {
         $model = get_called_class ();
         $result = array ();
-        $sql = ar ()->where ( $where )->limit ( $limit, $offset )->order_by ( $order_by )->get ( $model::$table );
-        $rows = static::connect ()->query($sql)->fetch ();
+        $select = static::database()->select('*', $model::$table, $where, $limit, $offset, $order_by);
+        $rows = static::database()->fetch($select[0], $select[1]);
         if (is_array ( $rows ))
         {
             foreach ( $rows as $row )
@@ -163,22 +163,8 @@ Abstract class ORM
     public static function count(array $where = NULL)
     {
         $model = get_called_class ();
-        $sql = ar ()->where ( $where )->count_all_results ( $model::$table );
-        return static::connect ()->query($sql)->column ();
-    }
-    
-    /**
-     * 获取一列数据
-     *
-     * @param $where array       	
-     * @param $column string       	
-     * @return int
-     */
-    public static function column(array $where = NULL, $column = NULL)
-    {
-        $model = get_called_class ();
-        $sql = ar ()->select ( array ($column ? $column : static::$key ) )->where ( $where )->get ( $model::$table );
-        return static::connect ()->query($sql)->column ();
+        $select = static::database()->select('COUNT(*)', $model::$table, $where);
+        return static::database()->column($select[0], $select[1]);
     }
     
     /**
@@ -187,17 +173,12 @@ Abstract class ORM
      * @param $where array       	
      * @return int
      */
-    public static function row(array $where = NULL, $order = '', $default = NULL)
+    public static function row(array $where = NULL, $order = NULL)
     {
         $model = get_called_class ();
-        $sql = ar ()->where ( $where )->order_by ( $order )->limit ( 1 )->get ( $model::$table );
-        $row = static::connect ()->query($sql)->row ();
-        if ($row)
-        {
-            $model = get_called_class ();
-            return new $model ( $row );
-        }
-        return $default;
+        $select = static::database()->select('*', $model::$table, $where, 1, 0, $order);
+        $row = static::database()->row($select[0], $select[1], $model);
+        return $row;
     }
     
     /**
@@ -428,8 +409,7 @@ Abstract class ORM
         {
             return false;
         }
-        $sql = ar ()->insert ( static::$table, $this->changed );
-        $id = static::connect ()->query($sql)->last_insert_id ();
+        $id = static::database()->insert(static::$table, $this->changed);
         $this->data [static::$key] = $id;
         $this->loaded = $this->saved = 1;
         $this->changed = array ();
@@ -448,8 +428,7 @@ Abstract class ORM
         {
             return false;
         }
-        $sql = ar ()->update ( static::$table, $this->changed, array (static::$key => $this->data [static::$key] ) );
-        $count = static::connect ()->query($sql)->row_count ();
+        $count = static::database()->update(static::$table, $this->changed, array (static::$key => $this->data [static::$key] ));
         $this->saved = 1;
         $this->changed = array ();
         return $count;
@@ -466,8 +445,7 @@ Abstract class ORM
         {
             throw new \Exception ( 'this class data[' . static::$key . '] is empty' );
         }
-        $sql = ar ()->delete ( static::$table, array (static::$key => $this->data [static::$key] ) );
-        $count = static::connect ()->query($sql)->row_count ();
+        $count = static::database()->delete(static::$table, array (static::$key => $this->data [static::$key] ));
         $this->clear ();
         return $count;
     }
