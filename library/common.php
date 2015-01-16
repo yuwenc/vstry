@@ -77,10 +77,6 @@ function log_message($message, $dir = NULL)
 	if (is_null($dir))
 	{
 		$dir = \Core\Application::config ()->log_dir;
-		if (empty($dir))
-		{
-		    return false;
-		}
 	}
 	$client_ip = client_ip();
 	if ( !is_dir($dir) )
