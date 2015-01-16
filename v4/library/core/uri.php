@@ -43,7 +43,7 @@ class URI
 	{
 		$arr = array();
 		$path = self::get_url_path();
-		$slice = array_slice(explode('/', $path), $n, -1);
+		$slice = array_slice(explode('/', $path), $n);
 	 	while (count($slice) > 0)
         {
             $arr[array_shift($slice)] = array_shift($slice);
