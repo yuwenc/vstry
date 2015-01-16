@@ -8,4 +8,4 @@ require realpath ( __DIR__ .'/../library/core/application.php');
 
 \Core\Application::init_autoload();
 
-\Core\Router::dispatch();
+\Core\Router::dispatch(\Core\Application::config()->route_maps, \Core\URI::get_url_path());
