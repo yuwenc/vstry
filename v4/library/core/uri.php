@@ -24,7 +24,7 @@ class URI
 	public static function a2p($arr)
 	{
 		$path = '/';
-	    if(empty(\Core\Application::get_module()))
+	    if(!empty(\Core\Application::get_module()))
         {
         	$path .= \Core\Application::get_module().'/';
         }

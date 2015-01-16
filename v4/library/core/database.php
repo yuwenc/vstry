@@ -100,7 +100,7 @@ class Database
     }
     
     /**
-     * Quotes a string for use in a query
+     * 用引号引用内容
      *
      * @param mixed $value to quote
      * @return string
@@ -196,10 +196,10 @@ class Database
     }
     
     /**
-     * Run a DELETE SQL query and return the number of rows deleted
+     * 删除数据
      *
-     * @param string $sql query to run
-     * @param array $params the prepared query params
+     * @param string $table
+     * @param array $where 
      * @return int
      */
     public function delete($table, $where = NULL)
@@ -218,7 +218,7 @@ class Database
     }
     
     /**
-     * Creates and runs an INSERT statement using the values provided
+     * 写入数据
      *
      * @param string $table the table name
      * @param array $data the column => value pairs
@@ -227,7 +227,6 @@ class Database
     public function insert($table, array $data, $cache_statement = TRUE)
     {
         $sql = $this->insert_sql ( $table, $data );
-        // Insert data and return the new row's ID
         return $this->query ( $sql, array_values ( $data ), $cache_statement ) ? $this->pdo->lastInsertId () : NULL;
     }
     
@@ -334,8 +333,6 @@ class Database
     }
     
     /**
-     * Create the ORDER BY clause for MySQL and SQLite (still working on PostgreSQL)
-     *
      * @param array $fields to order by
      */
     protected function order_by($fields = NULL)

@@ -115,7 +115,7 @@ class Router
     	}
     	else 
     	{
-    		echo 'dispatch 404';
+    		\Core\Application::abort(404, 'dispatch 404');
     	}
     }
 }
