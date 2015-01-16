@@ -23,7 +23,7 @@ class Application
     /**
      * 设置模块
      */
-    public static function module($name = null)
+    public static function module($name = null, $path)
     {
         if (is_null($name))
         {
@@ -33,7 +33,7 @@ class Application
         {
             self::$module = $name;
             // 定义项目目录常量
-			define ( 'W_APPLICATION_PATH', realpath ( __DIR__ .'/../../'.$name));
+			define ( 'W_APPLICATION_PATH', $path);
 			//初始化加载
 			require realpath ( __DIR__ .'/../bootstrap.php');
         }
