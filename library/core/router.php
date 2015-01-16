@@ -102,9 +102,9 @@ class Router
     /**
      * 执行
      */
-    public static function dispatch()
+    public static function dispatch($pattern_map, $url)
     {
-    	$class_action = \Core\Router::match_all(\Core\Application::config()->route_maps, \Core\URI::get_url_path());
+    	$class_action = \Core\Router::match_all($pattern_map, $url);
     	$parts = explode('::', $class_action);
     	if(file_exists(W_APPLICATION_PATH.$parts[0].W_EXT))
     	{
