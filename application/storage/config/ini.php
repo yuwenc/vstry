@@ -39,7 +39,7 @@ $config['database']['master'] = array (
  * cookie的配置
  */
 $config['cookie'] = array(
-	'lifetime'  => null,
+	'expire'  => null,
 	'path'     => '/',
 	'domain'   => '',
 	'secure'   => false,
@@ -47,16 +47,14 @@ $config['cookie'] = array(
 );
 
 /**
- * memcached 配置
+ * cookie的配置
  */
-$config['cache_option'] = array(
-	'servers'    => array(
-		'127.0.0.1'  =>  11211,
-		'127.0.0.1'  =>  11210,
-		'127.0.0.1'  =>  11209,
-	 ),
-	'cache_life' => 92000,
-	'compress'   => false,
+$config['session'] = array(
+	'expire'  => null,
+	'path'     => '/',
+	'domain'   => '',
+	'secure'   => false,
+	'httponly' => true,
 );
 
 /**
