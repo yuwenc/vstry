@@ -4,10 +4,6 @@
  */
 $config['view_dir'] = W_APPLICATION_PATH . '/view';
 
-/**
- * 配置日志的存储绝对路径
- */
-$config['log_dir'] = W_APPLICATION_PATH . '/storage/log';
 
 /**
  * 图片资源目录
@@ -18,6 +14,11 @@ $config['upload_dir'] = realpath(W_APPLICATION_PATH . '/../public/upload');
  * 图片资源url
  */
 $config['upload_url'] = W_DOMAIN.'/upload';
+
+/**
+ * 配置日志的存储绝对路径
+ */
+$config['log_dir'] = W_APPLICATION_PATH . '/storage/log';
 
 /**
  * 开启错误
