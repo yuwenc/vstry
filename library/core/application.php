@@ -89,6 +89,15 @@ class Application
 		return $configs[$file_name];
 	}
 
+	/**
+	 * 中断
+	 */
+	public static function abort($error_code, $view)
+	{
+        header ( "status: {$error_code}" );
+        echo $view;
+        exit ();
+	}
 
     /**
      * 获取版本

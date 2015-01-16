@@ -18,12 +18,11 @@ class Error
         $file = str_replace(W_APPLICATION_PATH, '', $e->getFile());
         $message = "{$e->getMessage()} [{$file}] ({$e->getLine()})";
         log_message ( $message );
-        if (\Core\Application::error_reporting() !== 0)
-        {
-            echo '<h2>Throw Exception: '.$message."</h2>";
-            echo self::fetch_source_code($e->getFile(), $e->getLine());
-            exit();
-        }
+        /*
+        echo '<h2>Throw Exception: '.$message."</h2>";
+        echo self::fetch_source_code($e->getFile(), $e->getLine());
+        exit();
+        */
     }
     
     /**
@@ -48,29 +47,6 @@ class Error
             return;
         }
         self::handler_exception ( new \ErrorException ( $errstr, $errno, 0, $file, $line ) );
-    }
-
-    /**
-     * 输出404错误
-     */
-    public static function show_404($view = NULL)
-    {
-        static $__view_404 = NULL;
-        header ( "status: 404 Not Found" );
-        if (! is_null ( $view ))
-        {
-            $__view_404 = $view;
-            return true;
-        }
-        if (! empty ( $__view_404 ))
-        {
-            echo $__view_404;
-        }
-        else
-        {
-            echo '404';
-        }
-        exit ();
     }
     
     /**

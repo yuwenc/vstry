@@ -37,7 +37,7 @@ abstract class Controller
         $bool = method_exists ( $this, $method ) && $reflector = new \ReflectionMethod ( $this, $method );
         if (! $bool || ! $reflector->isPublic () || $reflector->isStatic () || $method == 'run' || $method == 'initialize' || $method == 'send')
         {
-            \Core\Error::show_404();
+            \Core\Application::abort(404, 'action not exits!');
         }
         // 如果不想让他顺序进行抛出异常即可中断
         $this->initialize ();

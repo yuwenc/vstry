@@ -1,11 +1,11 @@
 <?php
+
 /**
  * 简化操作的核心函数
- * @date 2012-5-3
+ * @date 2015-1-16
  *
  * @author 古嗣小井 279537592@qq.com
  */
-
 function event($event, $value = NULL, $callback = NULL)
 {
 	static $events = array ();

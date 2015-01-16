@@ -3,15 +3,17 @@
 require realpath ( __DIR__ .'/../library/core/uri.php');
 // 定义框架使用的常量和方法
 require realpath ( __DIR__ .'/../library/core/application.php');
-
+// manage 后台管理模块
 if(\Core\URI::part(0) == 'manage')
 {
     
 }
+// API接口模块
 elseif(\Core\URI::part(0) == 'api') 
 {
     
 }
+// 默认模块
 else 
 {
     // 设置模块url别名和操作系统路径
