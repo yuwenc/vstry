@@ -25,18 +25,12 @@ class Application
      */
     public static function bind_module($name, $path)
     {
-        if (is_null($name))
-        {
-            return self::$module;
-        }
-        else
-        {
-            self::$module = $name;
-            // 定义项目目录常量
-			define ( 'W_APPLICATION_PATH', $path);
-			//初始化加载
-			require realpath ( __DIR__ .'/../bootstrap.php');
-        }
+        // 设置模块
+        self::$module = $name;
+        // 定义项目目录常量
+		define ( 'W_APPLICATION_PATH', $path);
+		//初始化加载
+		require realpath ( __DIR__ .'/../bootstrap.php');
     }
     
     /**
