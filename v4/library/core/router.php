@@ -102,7 +102,7 @@ class Router
     /**
      * 执行
      */
-    public static function run()
+    public static function dispatch()
     {
     	$class_action = \Core\Router::match_all(\Core\Application::config()->route_maps, \Core\URI::get_url_path());
     	$parts = explode('::', $class_action);
@@ -110,14 +110,7 @@ class Router
     	{
     		$parts[0] = str_replace('/', '\\', $parts[0]);
     		$class = new $parts[0];
-    		if(method_exists($class, $parts[1]))
-    		{
-    			call_user_func(array($class, $parts[1]));
-    		}
-    		else 
-    		{
-    			echo 'action is not exits!';
-    		}
+    		$class->run($parts[1]);
     	}
     	else 
     	{

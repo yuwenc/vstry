@@ -21,7 +21,7 @@ class Cookie
      */
     public static function init_cookie_params()
     {
-    	$config = config()->cookie;
+    	$config = \Core\Application::config()->cookie;
         foreach ( self::$config as $key => $val )
         {
             if (isset ( $config [$key] ))

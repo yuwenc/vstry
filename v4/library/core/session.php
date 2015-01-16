@@ -19,7 +19,7 @@ class Session
      */
     public static function init_cookie_params()
     {
-    	$config = config()->session;
+    	$config = \Core\Application::config()->session;
         session_set_cookie_params ( $config ['expire'], $config ['path'], $config ['domain'], $config ['secure'], $config ['httponly'] );
     }
     
