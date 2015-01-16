@@ -66,4 +66,21 @@ class URI
 		}
 		return $default;
 	}
+	
+	/**
+	 * 键值
+	 */
+	public static function kv($key, $default = null, $start = 0)
+	{
+	    static $kv_arr = null;
+	    if(empty($kv_arr[$start]))
+	    {
+	        $kv_arr[$start] = self::p2a($start);
+	    }
+	    if(!isset($kv_arr[$start][$key]))
+	    {
+	        $kv_arr[$start][$key] = $default;
+	    }
+	    return $kv_arr[$start][$key];
+	}
 }
