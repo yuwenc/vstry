@@ -351,7 +351,7 @@ class Uploader
      */
     public function move($to_path_file)
     {
-        @mkdir(dirname($to_path_file), 0777, true);
+        @mkdir(dirname($to_path_file), 0775, true);
         if ($this->_file['is_moved'])
         {
             $ret = rename( $this->file_path (), $to_path_file );
