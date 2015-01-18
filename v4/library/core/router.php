@@ -106,12 +106,19 @@ class Router
     {
     	$class_action = \Core\Router::match_all($pattern_map, $url);
     	$parts = explode('::', $class_action);
-    	if(file_exists(W_APPLICATION_PATH.$parts[0].W_EXT))
+    	$class_file = strtolower(W_APPLICATION_PATH.$parts[0].W_EXT);
+    	if(file_exists($class_file))
     	{
     		$parts[0] = str_replace('/', '\\', $parts[0]);
     		$class = new $parts[0];
     		$path = explode('/', $parts[1]);
-    		$class->run(array_shift($path));
+    		$action = array_shift($path);
+    		$n = stripos($action, '?');
+    		if($n)
+    		{
+    			$action = substr($action, 0, $n);
+    		}
+    		$class->run($action);
     	}
     	else 
     	{
