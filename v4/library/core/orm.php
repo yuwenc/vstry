@@ -166,6 +166,19 @@ Abstract class ORM
         $select = static::database()->select('COUNT(*)', $model::$table, $where);
         return static::database()->column($select[0], $select[1]);
     }
+
+    /**
+     * 简单统计数据记录总和
+     *
+     * @param $where array          
+     * @return int
+     */
+    public static function sum(array $where = NULL, $column)
+    {
+        $model = get_called_class ();
+        $select = static::database()->select("SUM({$column})", $model::$table, $where);
+        return static::database()->column($select[0], $select[1]);
+    }
     
     /**
      * 获取包含一行数据的对象
