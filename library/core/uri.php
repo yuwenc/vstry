@@ -13,7 +13,13 @@ class URI
 	 */
 	public static function get_url_path()
 	{
-		return trim ( $_SERVER ['REQUEST_URI'], '/' );
+		$url = $_SERVER ['REQUEST_URI'];
+		$n = stripos($url, '?');
+		if($n)
+		{
+			$url = substr($url, 0, $n);
+		}
+		return trim ( $url, '/' );
 	}
 	
 	/**
@@ -34,6 +40,21 @@ class URI
 			$path .= $key.'/'.$val.'/';
 		}
         return rtrim($path, '/');
+	}
+	
+	/**
+	 * 合并单前url
+	 */
+	public static function a2p_before(array $arr)
+	{
+		$n = 0;
+		$module = \Core\Application::get_module();
+		if(!empty($module))
+		{
+			$n = 1;
+		}
+		$arr = array_merge(self::p2a($n), $arr);
+		return self::a2p($arr);
 	}
 	
 	/**

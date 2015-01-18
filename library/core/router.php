@@ -113,11 +113,6 @@ class Router
     		$class = new $parts[0];
     		$path = explode('/', $parts[1]);
     		$action = array_shift($path);
-    		$n = stripos($action, '?');
-    		if($n)
-    		{
-    			$action = substr($action, 0, $n);
-    		}
     		$class->run($action);
     	}
     	else 
