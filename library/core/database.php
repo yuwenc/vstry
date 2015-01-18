@@ -110,57 +110,9 @@ class Database
         if (! $this->pdo) $this->connect ();
         return $this->pdo->quote ( $value );
     }
-    
+
     /**
-     * Run a SQL query and return a single column (i.e. COUNT(*) queries)
-     *
-     * @param string $sql query to run
-     * @param array $params the prepared query params
-     * @param int $column the optional column to return
-     * @return mixed
-     */
-    public function column($sql, array $params = NULL, $column = 0)
-    {
-        return ($statement = $this->query ( $sql, $params )) ? $statement->fetchColumn ( $column ) : NULL;
-    }
-    
-    /**
-     * Run a SQL query and return a single row object
-     *
-     * @param string $sql query to run
-     * @param array $params the prepared query params
-     * @param string $object the optional name of the class for this row
-     * @return array
-     */
-    public function row($sql, array $params = NULL, $object = NULL)
-    {
-        if (! $statement = $this->query ( $sql, $params )) return;
-        $row = $statement->fetch ( \PDO::FETCH_OBJ );
-        // 如果想使用自定义对象
-        if ($object) $row = new $object ( $row );
-        return $row;
-    }
-    
-    /**
-     * Run a SQL query and return an array of row objects or an array
-     * consisting of all values of a single column.
-     *
-     * @param string $sql query to run
-     * @param array $params the optional prepared query params
-     * @param int $column the optional column to return
-     * @return array
-     */
-    public function fetch($sql, array $params = NULL, $column = NULL)
-    {
-        if (! $statement = $this->query ( $sql, $params )) return;
-        // Return an array of records
-        if ($column === NULL) return $statement->fetchAll ( \PDO::FETCH_OBJ );
-        // Fetch a certain column from all rows
-        return $statement->fetchAll ( \PDO::FETCH_COLUMN, $column );
-    }
-    
-    /**
-     * Run a SQL query and return the statement object
+     * 执行sql入口
      *
      * @param string $sql query to run
      * @param array $params the prepared query params
@@ -170,9 +122,7 @@ class Database
     {
         $time = microtime ( TRUE );
         self::$last_query = $sql;
-        // Connect if needed
         if (! $this->pdo) $this->connect ();
-        // Should we cached PDOStatements? (Best for batch inserts/updates)
         if ($cache_statement)
         {
             $hash = md5 ( $sql );
@@ -190,9 +140,65 @@ class Database
             $statement = $this->pdo->prepare ( $sql );
         }
         $statement->execute ( $params );
-        // Save query results by database type
         self::$queries[] = array (microtime ( TRUE ) - $time, $sql );
         return $statement;
+    }
+    
+    /**
+     * 执行sql获取单列结果 (例如 COUNT(*) 查询)
+     *
+     * @param string $sql
+     * @param array $params
+     * @param int $column
+     * @return mixed
+     */
+    public function column($sql, array $params = NULL, $column = 0)
+    {
+        return ($statement = $this->query ( $sql, $params )) ? $statement->fetchColumn ( $column ) : NULL;
+    }
+    
+    /**
+     * 获取单行数据
+     *
+     * @param string $sql
+     * @param array $params
+     * @param string $object 自定义对象
+     * @return array
+     */
+    public function row($sql, array $params = NULL, $object = NULL)
+    {
+        if (! $statement = $this->query ( $sql, $params )) return;
+        $row = $statement->fetch ( \PDO::FETCH_OBJ );
+        // 如果想使用自定义对象
+        if ($object)
+        {
+        	$row = new $object ( $row );
+        }
+        return $row;
+    }
+    
+    /**
+     * Run a SQL query and return an array of row objects or an array
+     * consisting of all values of a single column.
+     *
+     * @param string $sql
+     * @param array $params
+     * @param int $column
+     * @return array
+     */
+    public function fetch($sql, array $params = NULL, $column = NULL)
+    {
+        if (! $statement = $this->query ( $sql, $params ))
+        {
+        	return;
+        }
+        // Return an array of records
+        if ($column === NULL)
+        {
+        	return $statement->fetchAll ( \PDO::FETCH_OBJ );
+        }
+        // Fetch a certain column from all rows
+        return $statement->fetchAll ( \PDO::FETCH_COLUMN, $column );
     }
     
     /**
@@ -254,7 +260,7 @@ class Database
      * @param array $data the column => value pairs
      * @return int
      */
-    public function update($table, $data, array $where = NULL, $cache_statement = TRUE)
+    public function update($table, $data, array $where, $cache_statement = TRUE)
     {
         $i = $this->i;
         // Column names come from the array keys
@@ -270,6 +276,7 @@ class Database
             return $statement->rowCount ();
         }
     }
+
     /**
      * Create a basic,  single-table SQL query
      *
@@ -302,7 +309,7 @@ class Database
     }
     
     /**
-     * Generate the SQL WHERE clause options from an array
+     * 生成where条件sql部分
      *
      * @param array $where array of column => $value indexes
      * @return array
