@@ -25,4 +25,4 @@ else
 //初始化自动加载    
 \Core\Application::init_autoload();
 // 分发请求
-\Core\Router::dispatch(\Core\Application::config()->route_maps, \Core\URI::get_url_path());
+\Core\Application::dispatch(\Core\Application::config()->route_maps, \Core\URI::get_url_path());
