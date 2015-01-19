@@ -21,6 +21,12 @@ class View
     protected static $css = array();
     
     /**
+     * 页面标题
+     * @var string
+     */
+    public static $title = '';
+    
+    /**
      * 视图文件
      * @var string
      */
