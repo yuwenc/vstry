@@ -10,53 +10,32 @@ class Cache
     /**
      * 配置文件
      */
-    public static $config = array (
+    protected static $config = array (
     	'cache_dir' => 'cache', 
     	'expires' => 180 
     );
     
     /**
-     * Lets you configure the cache properly, passing an array:
-     *
-     * <code>
-     * Cache::configure(array(
-     * 'expires' => 180,
-     * 'cache_dir' => 'cache'
-     * ));
-     * </code>
-     * 
-     * Or passing a key/val:
-     *
-     * <code>
-     * Cache::configure('expires', 180);
-     * </code>
-     *
-     * @access public
-     * @param mixed $key the array with de configuration or the key as string
-     * @param mixed $val the value for the previous key if it was an string
-     * @return void
+     * 自动配置缓存
      */
-    public static function configure($key, $val = null)
+    public static function init_configure()
     {
-        if (is_array ( $key ))
+        $config = \Core\Application::config()->cache;
+        foreach ( self::$config as $key => $val )
         {
-            foreach ( $key as $config_name => $config_value )
+            if (isset ( $config [$key] ))
             {
-                self::$config [$config_name] = $config_value;
+                self::$config [$key] = $config [$key];
             }
-        }
-        else
-        {
-            self::$config [$key] = $val;
         }
     }
     
     /**
-     * Get a route to the file associated to that key.
+     * 生成缓存的键
      *
      * @access public
      * @param string $key
-     * @return string the filename of the php file
+     * @return string
      */
     public static function generate_cache_key($key)
     {
@@ -64,11 +43,11 @@ class Cache
     }
     
     /**
-     * Get the data associated with a key
+     * 获取缓存数据
      *
      * @access public
      * @param string $key
-     * @return mixed the content you put in, or null if expired or not found
+     * @return mixed the content you set in, or null if expired or not found
      */
     public static function get($key, $raw = false, $custom_time = null)
     {
@@ -82,7 +61,7 @@ class Cache
     }
     
     /**
-     * Put content into the cache
+     * 将内容写入缓存
      *
      * @access public
      * @param string $key
@@ -91,7 +70,7 @@ class Cache
      * It can be useful for static html caching.
      * @return bool whether if the operation was successful or not
      */
-    public static function put($key, $content, $raw = false)
+    public static function set($key, $content, $raw = false)
     {
         $dest_file_name = self::generate_cache_key ( $key );
         
@@ -101,7 +80,9 @@ class Cache
         $ret = @file_put_contents ( $temp_file_name, $raw ? $content : serialize ( $content ) );
         
         if ($ret !== false)
-        {return @rename ( $temp_file_name, $dest_file_name );}
+        {
+        	return @rename ( $temp_file_name, $dest_file_name );
+        }
         
         @unlink ( $temp_file_name );
         return false;
@@ -112,7 +93,7 @@ class Cache
      *
      * @access public
      * @param string $key
-     * @return bool true if the data was removed successfully
+     * @return bool
      */
     public static function delete($key)
     {
@@ -123,7 +104,7 @@ class Cache
      * 清理全部缓存
      *
      * @access public
-     * @return bool always true
+     * @return bool
      */
     public static function flush()
     {
@@ -139,9 +120,9 @@ class Cache
      * 检测是否过期
      *
      * @access public
-     * @param $file the rout to the file
-     * @param int $time the number of minutes it was set to expire
-     * @return bool if the file has expired or not
+     * @param $file 
+     * @param int $time 
+     * @return bool 
      */
     public static function file_expired($file, $time = null)
     {
