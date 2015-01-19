@@ -53,7 +53,7 @@ class Cache
      */
     public static function get($key, $raw = false, $custom_second = null)
     {
-        if (! self::file_expired ( $file = self::generate_cache_key ( $key ), $custom_second ))
+        if (! self::expired ( $file = self::generate_cache_key ( $key ), $custom_second ))
         {
             $content = file_get_contents ( $file );
             return $raw ? $content : unserialize ( $content );
@@ -126,7 +126,7 @@ class Cache
      * @param int $time 
      * @return bool 
      */
-    public static function file_expired($file, $second = null)
+    public static function expired($file, $second = null)
     {
         if (! file_exists ( $file ))
         {
