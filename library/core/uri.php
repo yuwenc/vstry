@@ -106,6 +106,10 @@ class URI
 	        {
 	            $kv_arr[$start][$key] =  $_GET[$key];
 	        }
+	        elseif(isset($_POST[$key]))
+	        {
+	            $kv_arr[$start][$key] =  $_POST[$key];
+	        }
 	        else 
 	        {
 	            $kv_arr[$start][$key] = $default;
