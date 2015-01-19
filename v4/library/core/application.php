@@ -60,6 +60,28 @@ class Application
         spl_autoload_register ();
     }
     
+    /**
+     * 执行
+     */
+    public static function dispatch($pattern_map, $url)
+    {
+    	$class_action = \Core\Router::match_all($pattern_map, $url);
+    	$parts = explode('::', $class_action);
+    	$class_file = strtolower(W_APPLICATION_PATH.$parts[0].W_EXT);
+    	if(file_exists($class_file))
+    	{
+    		$parts[0] = str_replace('/', '\\', $parts[0]);
+    		$class = new $parts[0];
+    		$path = explode('/', $parts[1]);
+    		$action = array_shift($path);
+    		$class->run($action);
+    	}
+    	else 
+    	{
+    		\Core\Application::abort(404, 'dispatch 404');
+    	}
+    }
+    
 	/**
 	 * 获取配置文件
 	 *
