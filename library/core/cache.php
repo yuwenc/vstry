@@ -124,12 +124,12 @@ class Cache
      * @param int $time 
      * @return bool 
      */
-    public static function file_expired($file, $time = null)
+    public static function file_expired($file, $second = null)
     {
         if (! file_exists ( $file ))
         {
             return true;
         }
-        return (time () > (filemtime ( $file ) + ($time ? $time : self::$config ['expires'])));
+        return (time () > (filemtime ( $file ) + ($second ? $second : self::$config ['expires'])));
     }
 }
