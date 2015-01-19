@@ -5,6 +5,6 @@ class Main extends \Core\Controller
 {
 	public function index()
 	{
-		echo 'index';
+		echo view('main/index.php');
 	}
 }
