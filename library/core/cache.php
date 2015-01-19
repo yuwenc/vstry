@@ -12,7 +12,7 @@ class Cache
      */
     protected static $config = array (
     	'cache_dir' => 'cache', 
-    	'expires' => 180 
+    	'expires' => 7200, 
     );
     
     /**
@@ -47,11 +47,13 @@ class Cache
      *
      * @access public
      * @param string $key
-     * @return mixed the content you set in, or null if expired or not found
+     * @param bool $raw
+     * @param int $custom_second
+     * @return mixed
      */
-    public static function get($key, $raw = false, $custom_time = null)
+    public static function get($key, $raw = false, $custom_second = null)
     {
-        if (! self::file_expired ( $file = self::generate_cache_key ( $key ), $custom_time ))
+        if (! self::file_expired ( $file = self::generate_cache_key ( $key ), $custom_second ))
         {
             $content = file_get_contents ( $file );
             return $raw ? $content : unserialize ( $content );
