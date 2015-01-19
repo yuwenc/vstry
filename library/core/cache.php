@@ -65,22 +65,22 @@ class Cache
      *
      * @access public
      * @param string $key
-     * @param mixed $content the the content you want to store
-     * @param bool $raw whether if you want to store raw data or not. If it is true, $content *must* be a string
-     * It can be useful for static html caching.
-     * @return bool whether if the operation was successful or not
+     * @param mixed $content
+     * @param bool $raw 如果为true，则$content 必须为string
+     * @return bool
      */
     public static function set($key, $content, $raw = false)
     {
         $dest_file_name = self::generate_cache_key ( $key );
         
-        /** Use a unique temporary filename to make writes atomic with rewrite */
+        // 使用临时文件覆盖老文件
         $temp_file_name = str_replace ( ".php", uniqid ( "-", true ) . ".php", $dest_file_name );
         
         $ret = @file_put_contents ( $temp_file_name, $raw ? $content : serialize ( $content ) );
         
         if ($ret !== false)
         {
+        	@unlink ( $dest_file_name );
         	return @rename ( $temp_file_name, $dest_file_name );
         }
         
