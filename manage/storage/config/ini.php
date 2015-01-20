@@ -63,5 +63,5 @@ $config['session'] = array(
 $config['route_maps'] = array(
 	'manage/(:let)/(:let)/(:any)'  => '/Controller/${1}::${2}/${3}',
 	'manage/(:let)/(:any)'         => '/Controller/${1}::${2}',
-	'manage/(:any)'                => '/Controller/Main::index',   //默认的控制器
+	'(:any)'                => '/Controller/Main::index',   //默认的控制器
 );
