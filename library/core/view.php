@@ -21,10 +21,15 @@ class View
     protected static $css = array();
     
     /**
-     * 页面标题
+     * 公用页面标题
      * @var string
      */
     public static $title = '';
+	
+	/**
+	 * 公用数据
+	 */
+	protected static $__data = '';
     
     /**
      * 视图文件
@@ -72,6 +77,23 @@ class View
             array_push(self::$css, $file);
         }
     }
+	
+	/**
+	 * 页面通用数据
+	 */
+	public static function data($key, $val = null)
+	{
+		if(is_array($key))
+		{
+			self::$__data = $key;
+			return;
+		}
+		if(!isset(self::$__data[$key]))
+		{
+			self::$__data[$key] = $val;
+		}
+		return self::$__data[$key];
+	}
     
     /**
      * 初始化

@@ -128,7 +128,8 @@ function base64_url_decode($string = NULL)
  */
 function str_to_gbk($string, $from_encode = 'utf-8')
 {
-	return iconv ( $from_encode, 'gbk', $string );
+    return mb_convert_encoding($string, 'gbk', $from_encode);
+	//return iconv ( $from_encode, 'gbk', $string );
 }
 
 /**
@@ -138,7 +139,8 @@ function str_to_gbk($string, $from_encode = 'utf-8')
  */
 function str_to_utf8($string, $from_encode = 'gbk')
 {
-	return iconv ( $from_encode, 'utf-8', $string );
+    return mb_convert_encoding($string, 'utf-8', $from_encode);
+//	return iconv ( $from_encode, 'utf-8', $string );
 }
 
 /**

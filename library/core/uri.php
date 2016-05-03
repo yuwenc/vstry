@@ -7,6 +7,7 @@ namespace Core;
  */
 class URI 
 {
+    public static $params = array();
 	
 	/**
 	 * 获取请求的路径
@@ -14,6 +15,11 @@ class URI
 	public static function get_url_path()
 	{
 		$url = $_SERVER ['REQUEST_URI'];
+		$module = \Core\Application::get_module();
+	    if(!empty($module))
+        {
+        	$url = str_replace('/'.$module, '', $url);
+        }
 		$n = stripos($url, '?');
 		if($n)
 		{
@@ -45,16 +51,17 @@ class URI
 	/**
 	 * 合并单前url
 	 */
-	public static function a2p_before(array $arr)
+	public static function a2p_before(array $arr = array())
 	{
-		$n = 0;
-		$module = \Core\Application::get_module();
-		if(!empty($module))
+		$params = self::p2a();
+		if(empty($params))
 		{
-			$n = 1;
+		    $params = array('main'=>'index');
 		}
-		$arr = array_merge(self::p2a($n), $arr);
-		return self::a2p($arr);
+        $get = $_GET;
+        array_shift($get);
+        $params = array_merge($params, $get);
+		return self::a2p(array_merge($params, $arr));
 	}
 	
 	/**
@@ -92,29 +99,28 @@ class URI
 	/**
 	 * 键值
 	 */
-	public static function kv($key, $default = null, $start = 0)
+	public static function kv($key = NULL, $default = null)
 	{
-	    static $kv_arr = null;
-	    
-	    if(empty($kv_arr[$start]))
+	    if(empty(self::$params))
 	    {
-	        $kv_arr[$start] = self::p2a($start);
+	        self::$params = self::p2a();
+	        $get = $_GET;
+	        array_shift($get);
+	        self::$params = array_merge(self::$params, $get);
+	        self::$params = array_merge(self::$params, $_POST);
 	    }
-	    if(!isset($kv_arr[$start][$key]))
+	    if(is_array($key))
 	    {
-	        if(isset($_GET[$key]))
-	        {
-	            $kv_arr[$start][$key] =  $_GET[$key];
-	        }
-	        elseif(isset($_POST[$key]))
-	        {
-	            $kv_arr[$start][$key] =  $_POST[$key];
-	        }
-	        else 
-	        {
-	            $kv_arr[$start][$key] = $default;
-	        }
+	    	self::$params = array_merge(self::$params, $key);
 	    }
-	    return $kv_arr[$start][$key];
+	    if(!is_null($key) && !is_array($key))
+	    {
+    	    if(!isset(self::$params[$key]))
+            {
+                self::$params[$key] = $default;
+            }
+            return htmlspecialchars(self::$params[$key]);
+	    }
+	    return self::$params;
 	}
 }

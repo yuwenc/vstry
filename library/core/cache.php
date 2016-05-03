@@ -18,7 +18,7 @@ class Cache
     /**
      * 自动配置缓存
      */
-    public static function init_configure()
+    public static function init_config_params()
     {
         $config = \Core\Application::config()->cache;
         foreach ( self::$config as $key => $val )
@@ -68,7 +68,7 @@ class Cache
      * @access public
      * @param string $key
      * @param mixed $content
-     * @param bool $raw 如果为true，则$content 必须为string
+     * @param bool $raw 如果为true，则$content 必须为string，不进行数据序列化处理
      * @return bool
      */
     public static function set($key, $content, $raw = false)

@@ -100,6 +100,34 @@ class Database
     }
     
     /**
+     * 开始事务
+     */
+    public function begin_transaction()
+    {
+        if (! $this->pdo) $this->connect ();
+        return $this->pdo->beginTransaction ();
+    }
+    
+    /**
+     * 提交事务
+     * @return
+     */
+    public function commit()
+    {
+        if (! $this->pdo) $this->connect ();
+        return $this->pdo->commit ();
+    }
+    
+    /**
+     * 回滚事务
+     */
+    public function roll_back()
+    {
+        if (! $this->pdo) $this->connect ();
+        return $this->pdo->rollBack ();
+    }
+    
+    /**
      * 用引号引用内容
      *
      * @param mixed $value to quote
@@ -165,15 +193,13 @@ class Database
      * @param string $object 自定义对象
      * @return array
      */
-    public function row($sql, array $params = NULL, $object = NULL)
+    public function row($sql, array $params = NULL)
     {
-        if (! $statement = $this->query ( $sql, $params )) return;
-        $row = $statement->fetch ( \PDO::FETCH_OBJ );
-        // 如果想使用自定义对象
-        if ($object)
-        {
-        	$row = new $object ( $row );
+        if (! $statement = $this->query ( $sql, $params ))
+        { 
+             return NULL;   
         }
+        $row = $statement->fetch ( \PDO::FETCH_OBJ );
         return $row;
     }
     

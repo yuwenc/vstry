@@ -155,6 +155,68 @@ Abstract class ORM
     }
     
     /**
+     * 自定义查下数据
+     *
+     * @param $where array       	
+     * @param $limit int       	
+     * @param $offset int       	
+     * @param $order_by sring       	
+     */
+    public static function sql($sql, $style = 'fetch')
+    {
+        $model = get_called_class ();
+        
+        if($style == 'fetch')
+        {
+            $result = array ();
+            $rows = static::database()->fetch($sql);
+            if (is_array ( $rows ))
+            {
+                foreach ( $rows as $row )
+                {
+                    $result [] = new $model ( $row );
+                }
+            }
+            return $result;
+        }
+        elseif($style == 'row') 
+        {
+            $row = static::database()->row($sql);
+            if(empty($row))
+            {
+                return NULL;
+            }
+            return new $model($row);
+        }
+        elseif($style == 'column')
+        {
+            $result = static::database()->column($sql);
+            return $result;
+        }
+        elseif($style == 'insert')
+        {
+            static::database()->query($sql);
+            return static::database()->pdo->lastInsertId();
+        }
+        elseif($style == 'update')
+        {
+            $statement = static::database()->query($sql);
+            if ($statement)
+            {
+                return $statement->rowCount ();
+            }
+        }
+        elseif($style == 'delete')
+        {
+            $statement = static::database()->query($sql);
+            if ($statement)
+            {
+                return $statement->rowCount ();
+            }
+        }
+    }
+    
+    /**
      * 简单统计数据记录总数
      *
      * @param $where array       	
@@ -190,8 +252,12 @@ Abstract class ORM
     {
         $model = get_called_class ();
         $select = static::database()->select('*', $model::$table, $where, 1, 0, $order);
-        $row = static::database()->row($select[0], $select[1], $model);
-        return $row;
+        $row = static::database()->row($select[0], $select[1]);
+        if(empty($row))
+        {
+            return NULL;
+        }
+        return new $model($row);
     }
     
     /**
@@ -205,15 +271,14 @@ Abstract class ORM
         {
             return;
         }
-        
-        if (is_numeric ( $primary_key ))
+        if(is_array($primary_key) || is_object($primary_key))
+        {
+            $this->data = (array) $primary_key;
+            $this->loaded = TRUE;
+        }
+        else 
         {
             $this->data [static::$key] = $primary_key;
-        }
-        else
-        {
-            $this->data = ( array ) $primary_key;
-            $this->loaded = TRUE;
         }
         $this->saved = TRUE;
     }
@@ -274,7 +339,6 @@ Abstract class ORM
         {
             return $this->data [$key];
         }
-        
         $this->load ();
         return isset ( $this->data [$key] ) ? $this->data [$key] : $this->related ( $key );
     }
@@ -348,7 +412,6 @@ Abstract class ORM
             return FALSE;
         }
         $row = self::row(array(static::$key => $this->data [static::$key]));
-	
         if ($row)
         {
             $this->data = $row->to_array();
@@ -400,13 +463,17 @@ Abstract class ORM
      */
     public function save()
     {
-        if (isset($this->data [static::$key]))
+        if (! $this->changed)
         {
-            return $this->update ();
+            return false;
+        }
+        if(!empty($this->data [static::$key]))
+        {
+        	return $this->update();
         }
         else
         {
-            return $this->insert ();
+        	return $this->insert();
         }
     }
     
@@ -427,6 +494,7 @@ Abstract class ORM
         $this->loaded = $this->saved = 1;
         $this->changed = array ();
         return $id;
+
     }
     
     /**

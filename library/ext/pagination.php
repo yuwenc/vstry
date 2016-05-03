@@ -37,6 +37,12 @@ class Pagination
      */
     public $last_page;
     
+    /**
+     * 所有数量
+     * @var int
+     */
+    public $total = 0;
+    
     
     /**
      * 初始化
@@ -48,6 +54,9 @@ class Pagination
      */
     public function __construct($current_page, $total = 100, $limit = 20, $bars_num = 5, $max_page = 50)
     {
+        // 总数量
+        $this->total = $total;
+        
         // 修正最大显示页
         $this->maximum_page = $this->range($max_page, 1, intval(ceil($total / $limit)));
         
@@ -57,7 +66,7 @@ class Pagination
         // 修正第一个翻页按钮
         $this->first_page = $this->range($this->current_page - intval(ceil($bars_num / 2)), 1, $this->maximum_page);
         
-        // 修正最后一个方也按钮
+        // 修正最后一个翻页按钮
         $this->last_page = $this->range($this->first_page + $bars_num, 1, $this->maximum_page);
     }
     
@@ -69,8 +78,8 @@ class Pagination
      */
     protected function range($int, $min, $max)
     {
-        $int = $int < $min ? $min : $int;
         $int = $int > $max ? $max : $int;
+        $int = $int < $min ? $min : $int;
         return $int;
     }
     
